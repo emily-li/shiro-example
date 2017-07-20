@@ -64,7 +64,7 @@ public class WebApplicationTest {
     @Test
     public void testSuccessfulLogin() throws Exception {
         ResponseEntity<String> response = postForLogin(user, password);
-        assertThat(response.getHeaders().get("Location").get(0)).isEqualTo(url + "/");
+        assertThat(response.getHeaders().get("Location").get(0)).doesNotContain("error");
     }
 
     @Test
@@ -101,11 +101,11 @@ public class WebApplicationTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("username", user);
         map.add("password", password);
 
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
 
         return restTemplate.postForEntity(url + "/login", request, String.class);
     }
